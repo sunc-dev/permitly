@@ -32,13 +32,13 @@
   --font:'Inter',system-ui,sans-serif;
 }
 
-html,body{height:100%;font-family:var(--font);color:var(--fg);font-size:14px;line-height:1.5;-webkit-font-smoothing:antialiased;overflow:hidden;background:#F8F9FB}
+html,body{height:100%;font-family:var(--font);color:var(--fg);font-size:14px;line-height:1.5;-webkit-font-smoothing:antialiased;overflow:hidden;background:#E8EAED}
 
 /* ── SHELL ── */
 .app{display:flex;height:100vh;width:100vw}
 
 /* ── SIDEBAR ── */
-.sb{width:var(--sb);min-width:var(--sb);height:100vh;background:#F8F9FB;display:flex;flex-direction:column;flex-shrink:0;overflow:hidden;transition:width .28s cubic-bezier(.4,0,.2,1),min-width .28s cubic-bezier(.4,0,.2,1)}
+.sb{width:var(--sb);min-width:var(--sb);height:100vh;background:#E8EAED;display:flex;flex-direction:column;flex-shrink:0;overflow:hidden;transition:width .28s cubic-bezier(.4,0,.2,1),min-width .28s cubic-bezier(.4,0,.2,1)}
 .sb.collapsed{width:var(--sb-min);min-width:var(--sb-min)}
 
 .sb-top{display:flex;align-items:center;justify-content:space-between;padding:14px 10px 6px;flex-shrink:0}
@@ -372,7 +372,7 @@ html,body{height:100%;font-family:var(--font);color:var(--fg);font-size:14px;lin
 /* Bottom sheet */
 .bottom-sheet-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.4);z-index:400;display:flex;align-items:flex-end;justify-content:center;animation:fadeUp .2s ease both;}
 .bottom-sheet{width:100%;height:100vh;background:#F6F7F9;border-radius:0;display:flex;flex-direction:column;overflow:hidden;animation:sheetUp .3s cubic-bezier(.4,0,.2,1) both;}
-.sheet-inner{width:100%;max-width:860px;margin:0 auto;display:flex;flex-direction:column;flex:1;}
+.sheet-inner{width:100%;max-width:860px;margin:0 auto;display:flex;flex-direction:column;flex:1;padding:0 48px;}
 @keyframes sheetUp{from{transform:translateY(100%)}to{transform:translateY(0)}}
 .sheet-handle{width:36px;height:4px;border-radius:2px;background:var(--line);margin:10px auto 0;}
 
@@ -1814,7 +1814,7 @@ function renderPayStep(){
         '<div style="display:flex;justify-content:space-between;padding:12px 0;border-bottom:1px solid var(--line);"><span style="font-size:13.5px;color:var(--fg-2);">Subtotal</span><span style="font-size:13.5px;color:var(--fg);">$635.00</span></div>' +
         '<div style="display:flex;justify-content:space-between;padding:16px 0;font-size:15px;font-weight:700;color:var(--fg);"><span>Total due</span><span>$635.00</span></div>' +
       '</div>' +
-      '<div style="width:420px;flex-shrink:0;padding:40px 52px;display:flex;flex-direction:column;background:var(--bg-2);">' +
+      '<div style="width:520px;flex-shrink:0;padding:40px 72px;display:flex;flex-direction:column;background:var(--bg-2);">'  +
         '<div style="background:#fff;border:1px solid var(--line);border-radius:16px;padding:28px 24px;box-shadow:0 2px 12px rgba(0,0,0,0.06);">' +
           '<div style="display:flex;align-items:center;gap:8px;margin-bottom:24px;">' +
             '<div style="width:28px;height:28px;border-radius:50%;background:#1A4731;display:flex;align-items:center;justify-content:center;"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg></div>' +
@@ -1844,7 +1844,7 @@ function renderPayStep(){
         '<div style="display:flex;justify-content:space-between;padding:12px 0;border-bottom:1px solid var(--line);"><span style="font-size:13.5px;color:var(--fg-2);">Subtotal</span><span style="font-size:13.5px;color:var(--fg);">$635.00</span></div>' +
         '<div style="display:flex;justify-content:space-between;padding:16px 0;font-size:15px;font-weight:700;color:var(--fg);"><span>Total due</span><span>$635.00</span></div>' +
       '</div>' +
-      '<div style="width:420px;flex-shrink:0;padding:40px 52px;display:flex;flex-direction:column;background:var(--bg-2);">' +
+      '<div style="width:520px;flex-shrink:0;padding:40px 72px;display:flex;flex-direction:column;background:var(--bg-2);">'  +
         '<div style="background:#fff;border:1px solid var(--line);border-radius:16px;padding:28px 24px;box-shadow:0 2px 12px rgba(0,0,0,0.06);">' +
           '<div style="font-size:16px;font-weight:700;color:var(--fg);margin-bottom:20px;">Pay with saved card</div>' +
           buildCardSection() +
