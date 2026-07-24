@@ -61,7 +61,7 @@ export default function PaymentsView() {
             </div>
             <div style={{ display: "flex", flexDirection: "row", gap: 12, flexWrap: "wrap" }}>
               {OUTSTANDING.map((o, i) => (
-                <div key={i} style={{ background: "#FFFBEB", borderRadius: 10, padding: 20, width: 300, flexShrink: 0, cursor: "pointer", transition: "filter .15s" }} onMouseOver={(e) => (e.currentTarget.style.filter = "brightness(0.97)")} onMouseOut={(e) => (e.currentTarget.style.filter = "")}>
+                <div key={i} style={{ background: "#FFFBEB", borderRadius: 10, padding: 20, flex: "1 1 320px", minWidth: 280, maxWidth: 560, cursor: "pointer", transition: "filter .15s" }} onMouseOver={(e) => (e.currentTarget.style.filter = "brightness(0.97)")} onMouseOut={(e) => (e.currentTarget.style.filter = "")}>
                   <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 6 }}>
                     <span className="m3-label-large" style={{ color: "var(--fg)" }}>{o.title}</span>
                     <span className="m3-label-small" style={{ background: "rgba(180,83,9,0.12)", color: "#B45309", padding: "2px 8px", borderRadius: 20 }}>Due</span>
