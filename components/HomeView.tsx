@@ -76,17 +76,12 @@ function MockDoc({ badgeClass }: { badgeClass: string }) {
   const desk = DESK[badgeClass] ?? DESK.bd;
   return (
     <div style={{ height: 150, overflow: "hidden", background: desk, display: "flex", justifyContent: "center", paddingTop: 18 }}>
-      <div style={{ width: "70%", aspectRatio: "8.5 / 11", flexShrink: 0, background: "#fff", boxShadow: "0 2px 8px rgba(0,0,0,0.09)", borderRadius: "5px 5px 0 0", padding: "16px 16px 0", display: "flex", flexDirection: "column", gap: 8 }}>
-        <SkelLine w="52%" h={8} c="#D3D6DC" />
-        <div style={{ height: 2 }} />
-        <SkelLine w="100%" />
-        <SkelLine w="100%" />
-        <SkelLine w="100%" />
-        <SkelLine w="70%" />
-        <div style={{ height: 4 }} />
-        <SkelLine w="100%" />
-        <SkelLine w="100%" />
-        <SkelLine w="86%" />
+      <div style={{ width: "70%", aspectRatio: "8.5 / 11", flexShrink: 0, background: "#fff", boxShadow: "0 2px 8px rgba(0,0,0,0.09)", borderRadius: "5px 5px 0 0", padding: "18px 16px 0", display: "flex", flexDirection: "column", gap: 11 }}>
+        <SkelLine w="52%" h={10} c="#D3D6DC" />
+        <div style={{ height: 3 }} />
+        <SkelLine w="100%" h={8} />
+        <SkelLine w="100%" h={8} />
+        <SkelLine w="78%" h={8} />
       </div>
     </div>
   );

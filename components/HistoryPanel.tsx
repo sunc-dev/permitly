@@ -35,7 +35,7 @@ const GROUPS: { label: string; rows: Row[] }[] = [
 ];
 
 export default function HistoryPanel() {
-  const { histOpen, setHistOpen, openChat } = useApp();
+  const { histOpen, setHistOpen, openConversation } = useApp();
   const panelRef = useRef<HTMLDivElement>(null);
 
   // Close on outside click (but ignore clicks on the sidebar History button, handled via a small delay)
@@ -48,9 +48,9 @@ export default function HistoryPanel() {
     return () => document.removeEventListener("keydown", onKey);
   }, [histOpen, setHistOpen]);
 
-  const go = () => {
+  const go = (prompt: string) => {
     setHistOpen(false);
-    openChat();
+    openConversation(prompt);
   };
 
   return (
@@ -98,7 +98,7 @@ export default function HistoryPanel() {
               {gi > 0 && <div style={{ height: 1, background: "#D3D7DE", margin: "8px 0" }} />}
               <p className="sb-group" style={{ padding: "8px 16px 4px" }}>{g.label}</p>
               {g.rows.map((r, i) => (
-                <button className="sb-item" key={i} onClick={go} style={{ alignItems: "flex-start", height: "auto", padding: "8px 12px" }}>
+                <button className="sb-item" key={i} onClick={() => go(r.title)} style={{ alignItems: "flex-start", height: "auto", padding: "8px 12px" }}>
                   <span style={{ marginTop: 1, flexShrink: 0, display: "flex" }}>
                     <ChatBubble size={14} />
                   </span>

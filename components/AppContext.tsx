@@ -51,6 +51,7 @@ interface AppState {
   sendMsg: (text: string) => void;
   resetChat: () => void;
   chatTitle: string;
+  openConversation: (prompt: string, title?: string) => void;
 
   // side panel (permit details + wizard)
   spMode: "closed" | "details" | "wizard";
@@ -118,6 +119,31 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
     setView("chat");
     bump();
   }, [closeSP]);
+
+  // Open the chat pre-loaded with a mocked conversation for a recent topic.
+  const openConversation = useCallback(
+    (prompt: string, title?: string) => {
+      closeSP();
+      const reply = fallback(prompt);
+      const next: ChatMsg[] = [{ role: "user", text: prompt }];
+      if (reply && typeof reply === "object") {
+        const r = reply as PermitReply;
+        next.push({ role: "ai", intro: r.intro, outro: r.outro, card: { type: r.type, key: r.key } });
+      } else {
+        const det = detectP(prompt);
+        next.push({ role: "ai", text: reply as string });
+        if (det) next.push({ role: "ai", card: { type: det.type, key: det.key } });
+      }
+      setMsgs(next);
+      setChatGone(true);
+      setChatBusy(false);
+      setTyping(false);
+      setChatTitle(title ?? (prompt.length > 42 ? prompt.slice(0, 42) + "…" : prompt));
+      setView("chat");
+      bump();
+    },
+    [closeSP]
+  );
 
   const toggleSb = useCallback(() => setSbCollapsed((c) => !c), []);
   const handleBrand = useCallback(() => {
@@ -210,7 +236,28 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
 
   const wzNext = useCallback(() => setWzStep((s) => Math.min(s + 1, 4)), []);
   const wzBack = useCallback(() => setWzStep((s) => Math.max(s - 1, 1)), []);
-  const wzSubmit = useCallback(() => setWzSubmitted(true), []);
+  const wzSubmit = useCallback(() => {
+    setWzSubmitted(true);
+    // Notify the user in the chat with confirmation + next steps.
+    const ref = "BP-2024-1042";
+    setChatGone(true);
+    setTyping(true);
+    setTimeout(() => {
+      setTyping(false);
+      setMsgs((m) => [
+        ...m,
+        {
+          role: "ai",
+          text:
+            "🎉 Your **" +
+            (wzData.permitType || "permit") +
+            "** application has been submitted. Your reference number is **" +
+            ref +
+            "**.\n\n**What happens next**\n- Completeness check — we verify your documents (about 1 business day)\n- Technical review — a reviewer checks your plans (5–8 business days)\n- Decision issued — approval or a change request is sent by email\n\nI'll keep you posted here as it moves through each stage. You can also track it any time under **Applications**.",
+        },
+      ]);
+    }, 900);
+  }, [wzData]);
 
   const value: AppState & { typing: boolean } = {
     view,
@@ -236,6 +283,7 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
     sendMsg,
     resetChat,
     chatTitle,
+    openConversation,
     spMode,
     spPermit,
     closeSP,

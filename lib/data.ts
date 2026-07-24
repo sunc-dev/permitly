@@ -245,6 +245,12 @@ export const PD: Record<string, PermitDetail> = {
     docs: ["Site plan with dimensions", "Floor plan", "Structural drawings (if elevated)"],
     tip: "Decks under 10 sq m that are freestanding and under 30cm high don't need a permit.",
   },
+  building: {
+    fee: "$185 + ~0.6% of value",
+    time: "8–12 business days",
+    docs: ["Site plan", "Architectural drawings", "Structural drawings", "Owner or contractor details"],
+    tip: "A stamped drawing set from a designer or engineer speeds up review.",
+  },
   cafe: {
     fee: "$567 / year",
     time: "3–5 business days",
@@ -344,6 +350,7 @@ export interface PermitReply {
 export function detectP(t: string): { type: string; key: string } | null {
   t = t.toLowerCase();
   if (t.match(/deck|patio|porch/)) return { type: "Building permit — Deck", key: "deck" };
+  if (t.match(/addition|renovation|extension|remodel/)) return { type: "Building permit", key: "building" };
   if (t.match(/cafe|café|restaurant|coffee|bakery/)) return { type: "Business license", key: "cafe" };
   if (t.match(/food truck|street vendor/)) return { type: "Street vendor permit", key: "truck" };
   if (t.match(/event|festival|block party|gathering/)) return { type: "Special event permit", key: "event" };
@@ -362,6 +369,13 @@ export function fallback(t: string): PermitReply | string {
       type: "Building permit — Deck",
       outro:
         "Small freestanding decks under 10 sq m and under 30cm high usually don't need one. Want me to help you start an application?",
+    };
+  if (l.match(/addition|renovation|extension|remodel/))
+    return {
+      intro: "A home addition or major renovation that affects structure, plumbing, or electrical requires a **building permit** in Toronto.",
+      key: "building",
+      type: "Building permit",
+      outro: "Timeline is roughly 8–12 business days once your drawings are complete. Want me to help you start the application?",
     };
   if (l.match(/cafe|café|restaurant|coffee|bakery/))
     return {

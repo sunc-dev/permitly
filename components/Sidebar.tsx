@@ -15,7 +15,7 @@ const HistoryIcon = () => <ClockCounterClockwiseIcon size={16} color="currentCol
 const RecentIcon = () => <ChatCircleIcon size={16} color="currentColor" />;
 
 export default function Sidebar() {
-  const { view, goto, openChat, sbCollapsed, toggleSb, handleBrand, setHistOpen } = useApp();
+  const { view, goto, openConversation, sbCollapsed, toggleSb, handleBrand, setHistOpen } = useApp();
 
   return (
     <aside className={"sb" + (sbCollapsed ? " collapsed" : "")}>
@@ -66,11 +66,11 @@ export default function Sidebar() {
 
         <div className="sb-sep" />
         <p className="sb-group">Recent</p>
-        <button className="sb-item sb-recent" onClick={openChat}>
+        <button className="sb-item sb-recent" onClick={() => openConversation("I want to build a two-storey addition on my house", "Residential addition")}>
           <RecentIcon />
           <span className="sb-lbl">Residential addition</span>
         </button>
-        <button className="sb-item sb-recent" onClick={openChat}>
+        <button className="sb-item sb-recent" onClick={() => openConversation("I want to host a block party on my street", "Block party permit")}>
           <RecentIcon />
           <span className="sb-lbl">Block party permit</span>
         </button>
