@@ -162,15 +162,15 @@ export default function HomeView() {
             <div className="right-card" style={{ flex: 1, minWidth: 0, padding: "18px 20px", display: "flex", alignItems: "flex-end", justifyContent: "space-between", gap: 12, background: "transparent", border: "1px solid var(--line)" }}>
               <div>
                 <div style={{ display: "flex", alignItems: "center", gap: 7, marginBottom: 6 }}>
-                  <span className="m3-label-medium" style={{ color: "var(--ds-on-surface-dim)" }}>Fees outstanding</span>
+                  <span className="m3-label-medium" style={{ color: "var(--ds-on-surface-dim)", letterSpacing: "-0.01em" }}>Fees outstanding</span>
                   <span style={{ display: "inline-flex", alignItems: "center", gap: 4, background: "#FFFBEB", color: "#B45309", fontSize: 10.5, fontWeight: 600, padding: "2px 8px", borderRadius: 20, animation: "duePulse 2s ease-out infinite" }}>
                     <Warn size={10} />
                     Due on approval
                   </span>
                 </div>
-                <div style={{ display: "flex", alignItems: "baseline", gap: 2, lineHeight: 1, marginBottom: 0 }}>
-                  <span className="m3-headline-medium" style={{ color: "#6B7280" }}>$</span>
-                  <span className="m3-display-medium" style={{ color: "var(--ds-on-surface)" }}>635.00</span>
+                <div style={{ display: "flex", alignItems: "baseline", gap: 0, lineHeight: 1, marginBottom: 0 }}>
+                  <span className="m3-headline-medium num-font" style={{ color: "#6B7280", letterSpacing: "-0.05em" }}>$</span>
+                  <span className="m3-display-medium num-font" style={{ color: "var(--ds-on-surface)", letterSpacing: "-0.05em" }}>635.00</span>
                 </div>
               </div>
               <button

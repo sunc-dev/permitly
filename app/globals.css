@@ -30,6 +30,9 @@ html,body{height:100%;font-family:var(--font);color:var(--fg);font-size:14px;lin
 /* Tabular figures for numeric/monetary/reference data so columns align */
 .num,.tr-a,.sp-v,.app-d,.stat-n,.wz-fee-row,.wz-rv{font-variant-numeric:tabular-nums}
 
+/* Inter for numeric figures — tighter, cleaner numerals */
+.num-font{font-family:var(--font-num),'Inter',system-ui,sans-serif;font-variant-numeric:tabular-nums}
+
 /* ── SHELL ── */
 .app{display:flex;height:100vh;width:100vw}
 
