@@ -1,7 +1,7 @@
 "use client";
 
-import React, { useState } from "react";
-import { useApp } from "./AppContext";
+import React, { useEffect, useState } from "react";
+import { useApp, APP_DATA, AppRecord } from "./AppContext";
 import { Plus, Search, Dots } from "./Icons";
 import AppDetail from "./AppDetail";
 
@@ -67,12 +67,59 @@ const LANES: { key: LaneKey; label: string; countBg: string; countColor: string;
   { key: "completed", label: "Completed", countBg: "var(--green-s)", countColor: "var(--green)", laneBg: "#F1FAF5" },
 ];
 
+// Card fill/hover/accent colors, matching the palette used for the seeded
+// in-progress and completed cards, keyed by badge class.
+const BADGE_COLORS: Record<string, { bg: string; hover: string; metaColor: string }> = {
+  br: { bg: "#EFF6FF", hover: "#DBEAFE", metaColor: "#1D4ED8" },
+  bp: { bg: "#FFFBEB", hover: "#FEF3C7", metaColor: "var(--amber)" },
+  bg: { bg: "#ECFDF5", hover: "#D1FAE5", metaColor: "var(--green)" },
+};
+
+function laneForStatus(app: AppRecord): LaneKey {
+  if (app.status === "draft") return "draft";
+  if (app.status === "approved") return "completed";
+  return "inprogress";
+}
+
+function cardFromApp(app: AppRecord): KCard {
+  const colors = BADGE_COLORS[app.badgeClass] ?? BADGE_COLORS.br;
+  return {
+    ref: app.ref,
+    title: app.title,
+    badge: app.badge,
+    badgeClass: app.badgeClass,
+    bg: colors.bg,
+    hover: colors.hover,
+    meta: `${app.type} · Submitted ${app.submitted}`,
+    metaColor: colors.metaColor,
+  };
+}
+
 export default function AppsView() {
-  const { openChat, openAppDetail, detailRef, navKey } = useApp();
+  const { openChat, openAppDetail, detailRef, navKey, newAppRefs } = useApp();
   const [board, setBoard] = useState<Record<LaneKey, KCard[]>>(INITIAL);
   const [drag, setDrag] = useState<{ from: LaneKey; ref: string } | null>(null);
   const [over, setOver] = useState<LaneKey | null>(null);
   const [menuLane, setMenuLane] = useState<LaneKey | null>(null);
+
+  // Pick up applications submitted through the wizard — they live in
+  // APP_DATA but the board's own state is a static snapshot, so newly
+  // created refs need to be merged in explicitly as they appear.
+  useEffect(() => {
+    if (newAppRefs.length === 0) return;
+    setBoard((b) => {
+      const existing = new Set(Object.values(b).flat().map((c) => c.ref));
+      const additions = newAppRefs.filter((ref) => !existing.has(ref) && APP_DATA[ref]);
+      if (additions.length === 0) return b;
+      const next = { ...b };
+      for (const ref of additions) {
+        const app = APP_DATA[ref];
+        const lane = laneForStatus(app);
+        next[lane] = [cardFromApp(app), ...next[lane]];
+      }
+      return next;
+    });
+  }, [newAppRefs]);
 
   if (detailRef) {
     return (

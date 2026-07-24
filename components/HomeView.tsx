@@ -159,7 +159,7 @@ export default function HomeView() {
             {/* Fees + promo as two columns */}
             <div style={{ display: "flex", gap: 12, marginBottom: 22, alignItems: "stretch" }}>
             {/* Balance callout */}
-            <div className="right-card" style={{ flex: 1, minWidth: 0, padding: "18px 20px", display: "flex", alignItems: "center", justifyContent: "space-between", gap: 12, background: "transparent", border: "1px solid var(--line)" }}>
+            <div className="right-card" style={{ flex: 1, minWidth: 0, padding: "18px 20px", display: "flex", alignItems: "flex-end", justifyContent: "space-between", gap: 12, background: "transparent", border: "1px solid var(--line)" }}>
               <div>
                 <div style={{ display: "flex", alignItems: "center", gap: 7, marginBottom: 6 }}>
                   <span className="m3-label-medium" style={{ color: "var(--ds-on-surface-dim)" }}>Fees outstanding</span>

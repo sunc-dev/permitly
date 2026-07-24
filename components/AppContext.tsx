@@ -1,7 +1,24 @@
 "use client";
 
-import React, { createContext, useCallback, useContext, useState } from "react";
+import React, { createContext, useCallback, useContext, useRef, useState } from "react";
 import { APP_DATA, AppRecord, Comment, fallback, detectP, PermitReply } from "@/lib/data";
+
+// Reference-number prefix per permit type, matching the scheme already used
+// in the seed data (BP-2024-xxxx, EP-2024-xxxx, etc.)
+function refPrefixFor(permitKey: string): string {
+  switch (permitKey) {
+    case "cafe":
+      return "BL";
+    case "truck":
+      return "VP";
+    case "event":
+      return "EP";
+    case "tree":
+      return "TP";
+    default:
+      return "BP"; // building, deck, basement
+  }
+}
 
 export type View = "home" | "apps" | "payments" | "records" | "chat";
 
@@ -67,6 +84,10 @@ interface AppState {
   wzBack: () => void;
   wzSubmit: () => void;
   wzSubmitted: boolean;
+
+  // newly submitted applications (not part of the static seed data)
+  newAppRefs: string[];
+  lastSubmittedRef: string;
 }
 
 const Ctx = createContext<AppState | null>(null);
@@ -97,6 +118,9 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
   const [wzStep, setWzStep] = useState(1);
   const [wzData, setWzData] = useState({ permitType: "", permitKey: "" });
   const [wzSubmitted, setWzSubmitted] = useState(false);
+  const [newAppRefs, setNewAppRefs] = useState<string[]>([]);
+  const [lastSubmittedRef, setLastSubmittedRef] = useState("");
+  const refCounter = useRef(1050);
 
   const bump = () => setNavKey((k) => k + 1);
 
@@ -237,9 +261,40 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
   const wzNext = useCallback(() => setWzStep((s) => Math.min(s + 1, 4)), []);
   const wzBack = useCallback(() => setWzStep((s) => Math.max(s - 1, 1)), []);
   const wzSubmit = useCallback(() => {
+    const type = wzData.permitType || "Permit";
+    const prefix = refPrefixFor(wzData.permitKey);
+    const ref = `${prefix}-2024-${refCounter.current++}`;
+
+    // Register the new application so it shows up as a real record — the
+    // Applications board and the app-detail page both read from APP_DATA.
+    const record: AppRecord = {
+      title: `${type} — 42 Maple Avenue`,
+      type,
+      ref,
+      submitted: "Just now",
+      status: "in-review",
+      badge: "In review",
+      badgeClass: "br",
+      description: `${type} application for 42 Maple Avenue, submitted through Permitly.`,
+      fee: 635.0,
+      paid: false,
+      outstanding: [],
+      comments: [
+        {
+          author: "Permitly",
+          role: "System",
+          time: "Just now",
+          text: "Application received and assigned for review. Expect an initial completeness check within 1 business day.",
+          unread: false,
+        },
+      ],
+    };
+    APP_DATA[ref] = record;
+    setNewAppRefs((refs) => [...refs, ref]);
+    setLastSubmittedRef(ref);
     setWzSubmitted(true);
+
     // Notify the user in the chat with confirmation + next steps.
-    const ref = "BP-2024-1042";
     setChatGone(true);
     setTyping(true);
     setTimeout(() => {
@@ -250,7 +305,7 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
           role: "ai",
           text:
             "🎉 Your **" +
-            (wzData.permitType || "permit") +
+            type +
             "** application has been submitted. Your reference number is **" +
             ref +
             "**.\n\n**What happens next**\n- Completeness check — we verify your documents (about 1 business day)\n- Technical review — a reviewer checks your plans (5–8 business days)\n- Decision issued — approval or a change request is sent by email\n\nI'll keep you posted here as it moves through each stage. You can also track it any time under **Applications**.",
@@ -295,6 +350,8 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
     wzBack,
     wzSubmit,
     wzSubmitted,
+    newAppRefs,
+    lastSubmittedRef,
     typing,
   };
 

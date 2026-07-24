@@ -16,9 +16,19 @@ export default function SidePanel() {
 }
 
 function Wizard() {
-  const { wzStep, wzData, wzNext, wzBack, wzSubmit, wzSubmitted, closeSP, goto } = useApp();
+  const { wzStep, wzData, wzNext, wzBack, wzSubmit, wzSubmitted, closeSP, openAppDetail, lastSubmittedRef } = useApp();
 
-  if (wzSubmitted) return <SuccessView onDone={closeSP} onView={() => { closeSP(); goto("apps"); }} />;
+  if (wzSubmitted)
+    return (
+      <SuccessView
+        appRef={lastSubmittedRef}
+        onDone={closeSP}
+        onView={() => {
+          closeSP();
+          openAppDetail(lastSubmittedRef);
+        }}
+      />
+    );
 
   return (
     <>
@@ -372,7 +382,15 @@ function ReviewRow({ k, v }: { k: string; v: string }) {
 }
 
 // ── Success ──
-function SuccessView({ onDone, onView }: { onDone: () => void; onView: () => void }) {
+function SuccessView({
+  appRef,
+  onDone,
+  onView,
+}: {
+  appRef: string;
+  onDone: () => void;
+  onView: () => void;
+}) {
   const [pieces, setPieces] = useState<React.CSSProperties[]>([]);
   useEffect(() => {
     const colors = ["#1A56DB", "#0A7C52", "#9A5E00", "#C0392B", "#6B8EF5", "#E8B84B"];
@@ -413,7 +431,7 @@ function SuccessView({ onDone, onView }: { onDone: () => void; onView: () => voi
       <div className="wz-success-title">Application submitted!</div>
       <div className="wz-success-sub">You will receive an email confirmation shortly. We will notify you at every stage of the review.</div>
       <div className="wz-ref">
-        <span style={{ color: "var(--fg-3)", fontWeight: 400 }}>Reference #:</span> <span style={{ fontFamily: "monospace", fontWeight: 600 }}>BP-2024-1042</span>
+        <span style={{ color: "var(--fg-3)", fontWeight: 400 }}>Reference #:</span> <span style={{ fontFamily: "monospace", fontWeight: 600 }}>{appRef}</span>
       </div>
       <div className="wz-next">
         <div className="wz-next-title">What happens next</div>
